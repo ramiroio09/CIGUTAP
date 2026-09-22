@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CIGUTAP | Prototipo de Presupuestos</title>
+<style>
+:root{--blue:#153d5b;--blue2:#1f5f86;--light:#eef4f8;--line:#c8d3dc;--text:#24313a;--green:#1d7a55;--red:#a43d3d}
+*{box-sizing:border-box} body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#eef1f4;color:var(--text)}
+header{background:linear-gradient(135deg,#102f46,#1f607f);color:#fff;padding:18px 28px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 8px #0002}
+.brand{display:flex;gap:14px;align-items:center}.logo{width:54px;height:54px;border:2px solid #fff8;border-radius:10px;display:grid;place-items:center;font-weight:800;font-size:18px}.brand h1{margin:0;font-size:24px}.brand p{margin:3px 0 0;opacity:.8;font-size:12px}.tag{font-size:12px;background:#ffffff18;padding:8px 12px;border-radius:8px}
+nav{background:#fff;border-bottom:1px solid var(--line);padding:10px 28px;display:flex;gap:8px}nav button{border:0;background:transparent;padding:10px 14px;border-radius:7px;color:#42515b;cursor:pointer;font-weight:600}nav button.active,nav button:hover{background:var(--light);color:var(--blue)}
+main{max-width:1400px;margin:22px auto;padding:0 20px}.view{display:none}.view.active{display:block}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.card{background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:0 2px 7px #0000000c;padding:18px}.card h2{margin:0 0 14px;color:var(--blue);font-size:17px;border-bottom:2px solid var(--light);padding-bottom:10px}.fields{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.field label{display:block;font-size:11px;font-weight:700;color:#687680;margin-bottom:5px;text-transform:uppercase}.field input,.field select{width:100%;padding:10px;border:1px solid var(--line);border-radius:6px;background:#fff}.wide{grid-column:1/-1}
+.section-title{margin:20px 0 10px;font-size:16px;color:var(--blue)}.budget-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.service-table{width:100%;border-collapse:collapse}.service-table th{background:var(--blue);color:#fff;text-align:left;font-size:12px;padding:9px}.service-table td{border-bottom:1px solid #e3e8ec;padding:7px;font-size:13px}.service-table input{width:100%;border:1px solid var(--line);padding:7px;border-radius:5px}.money{text-align:right;white-space:nowrap}.qty{width:55px!important;text-align:center}.btn{border:0;border-radius:7px;padding:10px 14px;cursor:pointer;font-weight:700}.primary{background:var(--blue);color:white}.secondary{background:#e8eef2;color:var(--blue)}.success{background:var(--green);color:#fff}.danger{background:#f5e6e6;color:var(--red)}.actions{display:flex;gap:8px;justify-content:flex-end;margin-top:16px}.summary{margin-top:15px;margin-left:auto;max-width:380px;border-top:2px solid var(--blue);padding-top:10px}.sumrow{display:flex;justify-content:space-between;padding:5px 0}.total{font-size:19px;font-weight:800;color:var(--blue);border-top:1px solid var(--line);margin-top:5px;padding-top:10px}.badge{display:inline-block;padding:5px 9px;border-radius:20px;background:#e6f3ed;color:var(--green);font-size:11px;font-weight:700}
+.notice{background:#fff7df;border:1px solid #efd58a;border-radius:8px;padding:12px;font-size:12px;margin-bottom:15px}.dashboard{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.stat{background:#fff;border:1px solid var(--line);border-radius:10px;padding:17px}.stat small{color:#73808a}.stat strong{display:block;font-size:26px;color:var(--blue);margin-top:5px}.mock-paper{background:#fff;border:1px solid #bcc9d2;max-width:900px;margin:auto;padding:25px;box-shadow:0 4px 16px #0001}.paper-head{display:flex;justify-content:space-between;border-bottom:2px solid var(--blue);padding-bottom:12px}.paper-logo{font-size:28px;font-weight:900;color:var(--blue)}.paper-sub{font-size:11px}.paper-cols{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:15px}.paper-box{border:1px solid #999}.paper-box h3{background:#dfe7ec;margin:0;padding:6px;font-size:12px}.paper-line{padding:6px 8px;border-bottom:1px solid #ddd;font-size:11px;display:flex;justify-content:space-between}.paper-total{text-align:right;margin-top:15px;font-weight:bold}
+@media(max-width:850px){.grid,.budget-grid,.paper-cols{grid-template-columns:1fr}.dashboard{grid-template-columns:repeat(2,1fr)}.fields{grid-template-columns:1fr}}
+@media print{header,nav,.no-print{display:none!important}body{background:#fff}.view{display:none!important}.view.print-view{display:block!important}.mock-paper{box-shadow:none;border:0}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><div class="logo">CG</div><div><h1>CIGUTAP</h1><p>Rectificación integral de motores · Diesel y Naftero · Turbos</p></div></div>
+  <div class="tag">PROTOTIPO · Septiembre 2026</div>
+</header>
+<nav class="no-print">
+  <button class="active" onclick="show('inicio',this)">Inicio</button>
+  <button onclick="show('presupuesto',this)">Nuevo presupuesto</button>
+  <button onclick="show('clientes',this)">Clientes</button>
+  <button onclick="show('motores',this)">Motores y servicios</button>
+  <button onclick="show('historial',this)">Historial</button>
+</nav>
+<main>
+<section id="inicio" class="view active">
+  <div class="notice"><b>Demo:</b> esta primera versión busca validar el flujo con CIGUTAP. Los precios son editables y algunos servicios están cargados como ejemplo a partir del formato mostrado.</div>
+  <div class="dashboard">
+    <div class="stat"><small>Presupuestos del mes</small><strong>24</strong></div>
+    <div class="stat"><small>Pendientes</small><strong>8</strong></div>
+    <div class="stat"><small>En reparación</small><strong>6</strong></div>
+    <div class="stat"><small>Finalizados</small><strong>10</strong></div>
+  </div>
+  <div class="card" style="margin-top:18px"><h2>Acciones rápidas</h2><div class="actions" style="justify-content:flex-start"><button class="btn primary" onclick="show('presupuesto',document.querySelectorAll('nav button')[1])">+ Nuevo presupuesto</button><button class="btn secondary" onclick="show('clientes',document.querySelectorAll('nav button')[2])">Buscar cliente</button></div></div>
+</section>
+
+<section id="presupuesto" class="view">
+  <div class="card">
+    <h2>Presupuesto <span class="badge">Nº 12895 · BORRADOR</span></h2>
+    <div class="grid">
+      <div><h2>Datos del cliente</h2><div class="fields">
+        <div class="field"><label>Señor/es</label><input id="cliente" placeholder="Nombre y apellido"></div>
+        <div class="field"><label>Teléfono</label><input id="telefono" placeholder="0299... "></div>
+        <div class="field wide"><label>Domicilio</label><input id="domicilio" placeholder="Dirección"></div>
+      </div></div>
+      <div><h2>Vehículo / motor</h2><div class="fields">
+        <div class="field"><label>Marca vehículo</label><input placeholder="Ford / Mercedes / VW..."></div>
+        <div class="field"><label>Modelo</label><input placeholder="Cargo 1722..."></div>
+        <div class="field"><label>Motor</label><select id="motor" onchange="loadMotor()"><option value="bed300">BEDFORD 300 DIESEL · 4 cil. · 98,4 mm</option><option>Otro motor (demo)</option></select></div>
+        <div class="field"><label>Patente / dominio</label><input placeholder="AA 123 BB"></div>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="section-title">Detalle del presupuesto</div>
+  <div class="budget-grid">
+    <div class="card"><h2>Rectificaciones / mano de obra</h2><table class="service-table"><thead><tr><th>Servicio</th><th style="width:65px">Cant.</th><th style="width:145px">Precio</th></tr></thead><tbody id="services"></tbody></table></div>
+    <div class="card"><h2>Repuestos</h2><table class="service-table"><thead><tr><th>Repuesto</th><th style="width:65px">Cant.</th><th style="width:145px">Precio</th></tr></thead><tbody id="parts"></tbody></table><button class="btn secondary no-print" onclick="addPart()" style="margin-top:10px">+ Agregar repuesto</button>
+      <div class="summary"><div class="sumrow"><span>Total rectificaciones</span><b id="laborTotal">$ 0,00</b></div><div class="sumrow"><span>Total repuestos</span><b id="partsTotal">$ 0,00</b></div><div class="sumrow"><span>IVA %</span><input id="iva" value="0" type="number" style="width:70px;padding:5px" oninput="calc()"></div><div class="sumrow"><span>Descuento %</span><input id="discount" value="0" type="number" style="width:70px;padding:5px" oninput="calc()"></div><div class="sumrow total"><span>IMPORTE TOTAL</span><span id="grand">$ 0,00</span></div></div>
+    </div>
+  </div>
+  <div class="card" style="margin-top:18px"><h2>Condiciones y fechas</h2><div class="fields"><div class="field"><label>Fecha confirmación</label><input type="date"></div><div class="field"><label>Fecha aproximada de entrega</label><input type="date"></div><div class="field"><label>Fecha retiro motor</label><input type="date"></div><div class="field"><label>Estado</label><select><option>Presupuesto</option><option>Aprobado</option><option>En reparación</option><option>Finalizado</option><option>Entregado</option></select></div></div></div>
+  <div class="actions no-print"><button class="btn secondary" onclick="resetForm()">Limpiar</button><button class="btn success" onclick="printBudget()">Guardar / generar PDF</button></div>
+</section>
+
+<section id="clientes" class="view"><div class="card"><h2>Clientes</h2><div class="fields"><div class="field"><label>Buscar</label><input placeholder="Nombre, teléfono o dominio"></div><div class="field"><label>Acción</label><button class="btn primary" onclick="alert('En la versión completa: alta de cliente y ficha histórica.')">+ Nuevo cliente</button></div></div><table class="service-table" style="margin-top:15px"><thead><tr><th>Cliente</th><th>Vehículo</th><th>Último presupuesto</th><th>Estado</th></tr></thead><tbody><tr><td>Juan Pérez</td><td>Ford Cargo 1722</td><td>#12891 · $ 1.285.400</td><td><span class="badge">En reparación</span></td></tr><tr><td>Transportes del Valle</td><td>Mercedes Benz 1114</td><td>#12886 · $ 930.200</td><td><span class="badge">Finalizado</span></td></tr></tbody></table></div></section>
+
+<section id="motores" class="view"><div class="grid"><div class="card"><h2>Motor seleccionado</h2><div class="fields"><div class="field"><label>Código</label><input value="BED300"></div><div class="field"><label>Marca / modelo</label><input value="BEDFORD 300"></div><div class="field"><label>Combustible</label><input value="Diesel"></div><div class="field"><label>Cilindros</label><input value="4"></div><div class="field"><label>Diámetro</label><input value="98,4 mm"></div></div></div><div class="card"><h2>Idea para la base de datos</h2><p style="line-height:1.6">Cada motor tendrá sus servicios asociados y sus precios de referencia. CIGUTAP podrá modificar el precio propio sin tocar la estructura del sistema.</p><p><b>Ejemplo:</b> BED300 → Rectificar y bruñir cilindros → $ 108.800,80 (referencia).</p></div></div></section>
+
+<section id="historial" class="view"><div class="card"><h2>Historial de presupuestos</h2><table class="service-table"><thead><tr><th>Nº</th><th>Fecha</th><th>Cliente</th><th>Motor</th><th>Total</th><th>Estado</th></tr></thead><tbody><tr><td>12894</td><td>22/09/2026</td><td>Cliente demo</td><td>BEDFORD 300</td><td>$ 0,00</td><td>Borrador</td></tr><tr><td>12891</td><td>19/09/2026</td><td>Juan Pérez</td><td>BEDFORD 300</td><td>$ 1.285.400</td><td>En reparación</td></tr></tbody></table></div></section>
+
+<section id="print" class="view print-view"><div class="mock-paper"><div class="paper-head"><div><div class="paper-logo">CIGUTAP</div><div class="paper-sub">RECTIFICACIÓN INTEGRAL DE MOTORES DIESEL Y NAFTERO · REPARACIÓN Y VENTA DE TURBOS</div></div><div><b>PRESUPUESTO Nº <span id="pnum">12895</span></b><br><span id="pdate"></span></div></div><p><b>Señor/es:</b> <span id="pclient"></span></p><p><b>Domicilio:</b> <span id="pdom"></span> &nbsp; <b>Tel:</b> <span id="ptel"></span></p><div class="paper-cols"><div class="paper-box"><h3>RECTIFICACIONES</h3><div id="plabor"></div></div><div class="paper-box"><h3>REPUESTOS</h3><div id="pparts"></div></div></div><div class="paper-total">TOTAL RECTIFICACIONES: <span id="plabortotal"></span><br>TOTAL REPUESTOS: <span id="ppartstotal"></span><br><b>IMPORTE TOTAL: <span id="ptotal"></span></b></div><hr><p style="font-size:10px">Con la aprobación del presupuesto se deberá abonar el 70% del importe. El trabajo queda sujeto a las condiciones acordadas con CIGUTAP.</p><p style="margin-top:50px;font-size:11px">Conforme cliente: ________________________________</p></div></section>
+</main>
+<script>
+const services=[
+ ['Rectificar y bruñir cilindros',108800.80],['Bruñir cilindros',39284.93],['Encamisar, rectificar y bruñir cilindros',188031.20],['Rectificar pistones',68993.09],['Ajustar pernos a bielas',23946.97],['Ajustar pernos a pistón',23946.97],['Armar y alinear bielas',19951.29],['Armar y alinear bielas con perno a presión',35568.07],['Reacondicionar ojo de biela',47821.22],['Hacer y/o ampliar ranura de aros',23904.91],['Cambiar eyectores de pistón',60862.36],['Sacar, colocar y controlar camisas',52615.39]
+];
+const parts=['Conjunto de cilindros','Camisas de cilindros','Pistones','Pernos','Aros','Bujes de bielas','Cojinetes de biela','Cojinetes de bancadas','Juegos de arandelas axiales','Juegos junta de motor','Junta tapa cilindros','Kit retenes','Engranaje distribución levas','Engranajes distribución cigüeñal','Cadena de distribución','Válvulas de escape','Válvulas de admisión','Resortes de válvulas','Bulones de tapa de cilindros','Junta de tapa','Ejes de levas','Bomba de aceite','Cigüeñal','Biela','Tapa de cilindros','Bomba de agua','Kit de distribución','Agua destilada','Aceite','Filtro de aceite','Filtro de aire','Filtro de combustible','Anticongelante','Inyectores de aceite','Bujías','Pegamento','Turbo nuevo'];
+function money(n){return '$ '+Number(n||0).toLocaleString('es-AR',{minimumFractionDigits:2,maximumFractionDigits:2})}
+function render(){document.getElementById('services').innerHTML=services.map((s,i)=>`<tr><td>${s[0]}</td><td><input class="qty" type="number" min="0" value="0" data-labor="${s[1]}" oninput="calc()"></td><td class="money">${money(s[1])}</td></tr>`).join(''); document.getElementById('parts').innerHTML=parts.slice(0,12).map((p)=>`<tr><td>${p}</td><td><input class="qty" type="number" min="0" value="0" data-part-name="${p}" oninput="calc()"></td><td><input class="partprice" type="number" min="0" value="0" oninput="calc()"></td></tr>`).join('');calc()}
+function addPart(){const t=document.getElementById('parts');const tr=document.createElement('tr');tr.innerHTML='<td><input placeholder="Nombre del repuesto"></td><td><input class="qty" type="number" min="0" value="1" oninput="calc()"></td><td><input class="partprice" type="number" min="0" value="0" oninput="calc()"></td>';t.appendChild(tr)}
+function calc(){let labor=0;document.querySelectorAll('[data-labor]').forEach(x=>labor+=Number(x.value||0)*Number(x.dataset.labor));let pt=0;document.querySelectorAll('#parts tr').forEach(r=>{let q=r.querySelector('.qty');let p=r.querySelector('.partprice');if(q&&p)pt+=Number(q.value||0)*Number(p.value||0)});let iva=Number(document.getElementById('iva').value||0);let disc=Number(document.getElementById('discount').value||0);let sub=labor+pt;let total=(sub*(1-disc/100))*(1+iva/100);document.getElementById('laborTotal').textContent=money(labor);document.getElementById('partsTotal').textContent=money(pt);document.getElementById('grand').textContent=money(total)}
+function show(id,btn){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');window.scrollTo(0,0)}
+function resetForm(){location.reload()}
+function printBudget(){let client=document.getElementById('cliente').value||'—';document.getElementById('pclient').textContent=client;document.getElementById('pdom').textContent=document.getElementById('domicilio').value||'—';document.getElementById('ptel').textContent=document.getElementById('telefono').value||'—';document.getElementById('pdate').textContent=new Date().toLocaleDateString('es-AR');document.getElementById('plabor').innerHTML='';document.querySelectorAll('#services tr').forEach(r=>{let q=r.querySelector('.qty');if(q&&Number(q.value)>0){document.getElementById('plabor').innerHTML+=`<div class="paper-line"><span>${q.value} × ${r.children[0].textContent}</span><b>${r.children[2].textContent}</b></div>`}});document.getElementById('pparts').innerHTML='';document.querySelectorAll('#parts tr').forEach(r=>{let q=r.querySelector('.qty'),p=r.querySelector('.partprice');if(q&&p&&Number(q.value)>0){let name=r.children[0].querySelector('input')?.value||r.children[0].textContent;document.getElementById('pparts').innerHTML+=`<div class="paper-line"><span>${q.value} × ${name}</span><b>${money(Number(q.value)*Number(p.value))}</b></div>`}});document.getElementById('plabortotal').textContent=document.getElementById('laborTotal').textContent;document.getElementById('ppartstotal').textContent=document.getElementById('partsTotal').textContent;document.getElementById('ptotal').textContent=document.getElementById('grand').textContent;document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.getElementById('print').classList.add('active');setTimeout(()=>window.print(),200)}
+function loadMotor(){calc()}
+render();
+</script>
+</body>
+</html>
